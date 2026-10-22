@@ -1,0 +1,5 @@
+# LF everywhere: the page's Content Security Policy hash depends on exact script bytes
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.db binary
