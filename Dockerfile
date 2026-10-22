@@ -2,7 +2,7 @@
 # Build: docker build -t aliran .
 # Run:   docker run -p 3000:3000 -v aliran-data:/data --env-file .env aliran
 
-FROM node:22-bookworm-slim AS build
+FROM node:25-bookworm-slim AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev
@@ -10,7 +10,7 @@ COPY scripts ./scripts
 COPY src ./src
 RUN node scripts/build.js
 
-FROM node:22-bookworm-slim
+FROM node:25-bookworm-slim
 ENV NODE_ENV=production \
     HOST=0.0.0.0 \
     PORT=3000 \
