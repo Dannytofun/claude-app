@@ -29,7 +29,7 @@ Open http://127.0.0.1:3000 and create your account. The first account becomes th
 | `npm run dev` | Build the page and run the server, restarting when server files change |
 | `npm run build` | Build `public/index.html` (server) and `aliran-cashflow.html` (standalone) from `src/app.html` |
 | `npm start` | Run the server (production) |
-| `npm test` | Run all 109 tests: frontend features, backend, security and end to end |
+| `npm test` | Run all 112 tests: frontend features, backend, security and end to end |
 | `npm run lint` | Check code with ESLint |
 | `npm run check` | Lint, test and audit dependencies (what CI runs) |
 | `npm run gen-key` | Print a new `DATA_ENCRYPTION_KEY` |

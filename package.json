@@ -1,6 +1,6 @@
 {
   "name": "aliran-cashflow",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Personal cashflow and bill manager for Malaysia: web app plus a secure Node.js backend.",
   "private": true,
   "engines": {

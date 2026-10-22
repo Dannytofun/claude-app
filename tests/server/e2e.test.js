@@ -29,7 +29,7 @@ test('first visit asks the owner to create an account; afterwards sample data is
   assert.equal(page.$('#authRoot h1').textContent, 'Create your account');
   await signIn(page, 'aina@example.my', GOOD_PW, true);
   assert.match(page.$('#sideFoot').textContent, /Signed in as aina@example\.my/);
-  assert.ok(page.$$('.kpi').length === 5, 'dashboard shows');
+  assert.ok(page.$('#heroNum') && page.$$('.prow').length >= 3, 'dashboard shows');
   await until(() => page.$('#syncStatus').dataset.state === 'saved' && !page.ev('API.dirty'));
   const s = await serverState(app);
   assert.equal(s.version, 1);

@@ -12,7 +12,7 @@
 /* Layout: fixed left ledger-sidebar + scrolling work area; collapses to a top tab bar under 880px */
 :root{
   --bg:#f3f6f4; --surface:#ffffff; --surface-2:#edf2ef; --ink:#13201b; --ink-2:#45564f; --muted:#74857e;
-  --line:#dbe3df; --accent:#0d6b57; --accent-ink:#ffffff; --accent-soft:#dcefe8;
+  --line:#dbe3df; --line-strong:#b9c6c0; --accent:#0d6b57; --accent-ink:#ffffff; --accent-soft:#dcefe8;
   --side-bg:#0f2620; --side-ink:#cfe2da; --side-muted:#86a69a; --side-active:#1d3d34;
   --good:#127a3c; --good-soft:#dff2e6; --warn:#a86300; --warn-soft:#fbefd9; --bad:#c2362f; --bad-soft:#fbe3e1;
   --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
@@ -24,7 +24,7 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0c1311; --surface:#131c19; --surface-2:#1a2521; --ink:#e4eee9; --ink-2:#a9bab3; --muted:#7a8c85;
-  --line:#25322d; --accent:#4cc0a0; --accent-ink:#06231b; --accent-soft:#163a30;
+  --line:#25322d; --line-strong:#3a4a44; --accent:#4cc0a0; --accent-ink:#06231b; --accent-soft:#163a30;
   --side-bg:#08100d; --side-ink:#cfe2da; --side-muted:#6f8c81; --side-active:#16302a;
   --good:#46c477; --good-soft:#123321; --warn:#f0a531; --warn-soft:#382a10; --bad:#f06a61; --bad-soft:#3d1a18;
   --s1:#3987e5; --s2:#d95926; --s3:#199e70;
@@ -32,7 +32,7 @@
   color-scheme:dark;}}
 :root[data-theme="dark"]{
   --bg:#0c1311; --surface:#131c19; --surface-2:#1a2521; --ink:#e4eee9; --ink-2:#a9bab3; --muted:#7a8c85;
-  --line:#25322d; --accent:#4cc0a0; --accent-ink:#06231b; --accent-soft:#163a30;
+  --line:#25322d; --line-strong:#3a4a44; --accent:#4cc0a0; --accent-ink:#06231b; --accent-soft:#163a30;
   --side-bg:#08100d; --side-ink:#cfe2da; --side-muted:#6f8c81; --side-active:#16302a;
   --good:#46c477; --good-soft:#123321; --warn:#f0a531; --warn-soft:#382a10; --bad:#f06a61; --bad-soft:#3d1a18;
   --s1:#3987e5; --s2:#d95926; --s3:#199e70;
@@ -137,13 +137,6 @@ table.t td.amt{text-align:right;font-variant-numeric:tabular-nums;font-weight:60
 .due-ok{display:flex;align-items:center;gap:10px;background:var(--good-soft);color:var(--good);border-radius:var(--r);padding:10px 14px;font-weight:600}
 
 /* KPIs */
-.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:18px}
-.kpi{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0}
-.kpi .v{font-family:var(--f-display);font-size:1.45rem;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.kpi .d{font-size:.78rem;color:var(--muted)}
-.kpi.net{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-.kpi.net .eyebrow,.kpi.net .d{color:inherit;opacity:.8}
-.kpi.net.negative{background:var(--bad);border-color:var(--bad);color:#fff}
 .alerts{display:flex;flex-direction:column;gap:8px;margin-bottom:18px}
 .alert{display:flex;gap:10px;align-items:center;padding:9px 14px;border-radius:8px;font-size:.9rem;background:var(--warn-soft);color:var(--ink)}
 .alert.bad{background:var(--bad-soft)}
@@ -187,10 +180,6 @@ table.t td.amt{text-align:right;font-variant-numeric:tabular-nums;font-weight:60
 .goal .track{height:12px}
 
 /* compare */
-.cmp{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
-.cmp > div{background:var(--surface-2);border-radius:8px;padding:10px 12px;min-width:0}
-.cmp .v{font-weight:700;font-variant-numeric:tabular-nums;font-size:1.02rem}
-.cmp .dl{font-size:.78rem;font-weight:600}
 .insights{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;font-size:.9rem}
 .insights li{display:flex;gap:10px;align-items:flex-start}
 .insights li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-top:8px}
@@ -231,6 +220,54 @@ details.raw pre{white-space:pre-wrap;font-family:var(--f-mono);font-size:.76rem;
 .catlist .chip button:hover{color:var(--bad)}
 .kw-grid{display:grid;grid-template-columns:150px minmax(0,1fr);gap:8px 12px;align-items:center;font-size:.86rem}
 .set-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+
+/* progress-first dashboard */
+.hero{display:flex;flex-direction:column;gap:16px}
+.hero-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
+.hero-num{font-family:var(--f-display);font-size:clamp(2rem,4.5vw,2.8rem);font-weight:700;line-height:1.05;font-variant-numeric:tabular-nums;color:var(--good);margin:2px 0 4px}
+.hero-num.neg{color:var(--bad)}
+.hero-sub{font-size:.88rem}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;font-weight:700;padding:5px 11px;border-radius:99px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+.pill::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor}
+.pill.good{background:var(--good-soft);color:var(--good)}
+.pill.warn{background:var(--warn-soft);color:var(--warn)}
+.pill.bad{background:var(--bad-soft);color:var(--bad)}
+.alloc{position:relative;display:flex;height:22px;border-radius:7px;overflow:visible;background:var(--surface-2);gap:2px}
+.alloc .seg{height:100%;min-width:3px}
+.alloc .seg:first-child{border-radius:7px 0 0 7px}
+.alloc .seg:last-of-type{border-radius:0 7px 7px 0}
+.alloc .seg:only-of-type{border-radius:7px}
+.a-bills{background:var(--s1)}.a-spend{background:var(--s2)}.a-save{background:var(--s3)}
+.a-left{background:var(--good-soft);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--good) 45%,transparent)}
+.income-mark{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink);border-radius:2px}
+.alloc-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.84rem;color:var(--ink-2)}
+.alloc-legend span{display:inline-flex;align-items:center;gap:6px}
+.alloc-legend i{width:10px;height:10px;border-radius:3px;display:inline-block}
+.alloc-legend b{color:var(--ink);font-weight:600;font-variant-numeric:tabular-nums}
+.prows{display:flex;flex-direction:column;gap:14px}
+.prow-top{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;margin-bottom:6px}
+.prow-lbl{font-weight:600}
+.prow-val{color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.prow-val.good{color:var(--good);font-weight:600}.prow-val.warn{color:var(--warn);font-weight:600}.prow-val.over{color:var(--bad);font-weight:600}
+.track{position:relative}
+.prow .track{height:10px;overflow:visible}
+.prow .track .fill{border-radius:99px}
+.fill.calm{background:var(--line-strong)}
+.fill.prev{background:var(--line-strong)}
+.track.thin{height:7px}
+.pace-mark{position:absolute;top:-4px;bottom:-4px;width:2px;border-radius:2px;background:var(--ink);opacity:.75}
+.pairs{display:flex;flex-direction:column;gap:12px}
+.pair-bars{display:flex;flex-direction:column;gap:3px}
+.prow-top .pos,.prow-top .neg{font-weight:600;font-variant-numeric:tabular-nums;white-space:nowrap}
+details.fold{padding:0}
+details.fold > summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:16px 20px}
+details.fold > summary::-webkit-details-marker{display:none}
+details.fold > summary::after{content:"Show";margin-left:auto;font-size:.82rem;font-weight:600;color:var(--accent)}
+details.fold[open] > summary::after{content:"Hide"}
+details.fold > summary:hover h2{color:var(--accent)}
+details.fold > .stmt,details.fold > .fold-body{margin:0 20px 18px;width:calc(100% - 40px)}
+.summary-bar{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.budget .track{height:10px}
 #authRoot{min-height:100%;display:grid;place-items:center;padding-block:32px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));background:var(--bg)}
 .auth-card{width:min(420px,100%);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:28px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow)}
 .auth-card .brand{padding:0}
@@ -238,7 +275,6 @@ details.raw pre{white-space:pre-wrap;font-family:var(--f-mono);font-size:.76rem;
 #syncStatus{display:inline-block;margin-top:4px}
 #syncStatus[data-state="offline"],#syncStatus[data-state="error"]{color:#f0a531}
 
-@media (max-width:1180px){.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.kpi.net{grid-column:span 1}}
 @media (max-width:1020px){.grid2,.grid-wide,.set-grid{grid-template-columns:minmax(0,1fr)}}
 @media (max-width:880px){
   .app{grid-template-columns:minmax(0,1fr)}
@@ -252,12 +288,7 @@ details.raw pre{white-space:pre-wrap;font-family:var(--f-mono);font-size:.76rem;
   .main{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
 }
 @media (max-width:620px){
-  .kpis{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .kpi{padding:12px}
-  .kpi .v{font-size:1.08rem}
-  .kpi.net{grid-column:1/-1}
-  .kpi.net .v{font-size:1.4rem}
-  .form-grid,.filters,.cmp{grid-template-columns:minmax(0,1fr)}
+  .form-grid,.filters{grid-template-columns:minmax(0,1fr)}
   .budget{grid-template-columns:minmax(0,1fr) 100px}
   .kw-grid{grid-template-columns:minmax(0,1fr)}
   .nav svg{display:none}
@@ -930,22 +961,125 @@ function dueStripHTML(){
 }
 
 /* ---- dashboard ---- */
-function pctChange(a, b){ if (!b) return null; return (a - b) / Math.abs(b) * 100; }
-function renderDashboard(v){
-  const m = ui.month, T = monthTotals(m), P = monthTotals(addMonths(m, -1));
-  const rate = T.income ? T.saved / T.income * 100 : 0;
-  const delta = (a, b, upGood) => { const p = pctChange(a, b); if (p == null) return '<span class="d">No data last month</span>'; const good = upGood ? p >= 0 : p <= 0; return `<span class="d"><b class="${good ? 'pos' : 'neg'}">${p >= 0 ? '▲' : '▼'} ${Math.abs(p).toFixed(0)}%</b> vs ${MN[parseISO(addMonths(m, -1) + '-01').getMonth()]}</span>`; };
-  const over = budgetRows(m).filter(r => r.state !== 'ok');
-  let html = dueStripHTML();
-  html += `<div class="kpis">
-    <div class="kpi"><span class="eyebrow">Total income</span><span class="v">${money(T.income)}</span>${delta(T.income, P.income, true)}</div>
-    <div class="kpi"><span class="eyebrow">Total bills</span><span class="v">${money(T.bills)}</span>${delta(T.bills, P.bills, false)}</div>
-    <div class="kpi"><span class="eyebrow">Other spending</span><span class="v">${money(T.other)}</span>${delta(T.other, P.other, false)}</div>
-    <div class="kpi"><span class="eyebrow">Saved</span><span class="v">${money(T.saved)}</span><span class="d">${rate.toFixed(1)}% of income</span></div>
-    <div class="kpi net ${T.net < 0 ? 'negative' : ''}"><span class="eyebrow">Net cashflow</span><span class="v">${money(T.net, {sign:true})}</span><span class="d">Left after bills, spending &amp; savings</span></div>
+/* ---- shared progress helpers ---- */
+// How far through month m we are: 1 for past months, 0 for future ones.
+function monthPace(m){
+  const cur = curYM();
+  if (m < cur) return 1;
+  if (m > cur) return 0;
+  return todayDate().getDate() / daysInMonth(m);
+}
+const clamp01 = x => Math.max(0, Math.min(1, x || 0));
+/** A labelled progress bar. `mark` (0..1) draws a "where we should be" line. Details go in the hover title. */
+function progressRow(label, frac, value, opts = {}){
+  const pct = (clamp01(frac) * 100).toFixed(1);
+  const mark = opts.mark != null && opts.mark > 0 && opts.mark < 1 ? `<i class="pace-mark" style="left:${(opts.mark * 100).toFixed(1)}%" aria-hidden="true"></i>` : '';
+  return `<div class="prow" ${opts.title ? `title="${esc(opts.title)}"` : ''}>
+    <div class="prow-top"><span class="prow-lbl">${label}</span><span class="prow-val ${opts.state || ''}">${value}</span></div>
+    <div class="track" role="progressbar" aria-label="${esc(opts.aria || label.replace(/<[^>]+>/g, ''))}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><div class="fill ${opts.state || ''}" style="width:${pct}%"></div>${mark}</div>
   </div>`;
-  if (over.length) html += `<div class="alerts">` + over.map(r => `<div class="alert ${r.state === 'over' ? 'bad' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17.5v.5"/></svg><span><b>${esc(r.c)}</b> ${r.state === 'over' ? 'is over budget' : 'is close to its limit'}: ${money(r.spent)} of ${money(r.lim)} (${r.pct.toFixed(0)}%)${r.state === 'over' ? ', ' + money(r.spent - r.lim) + ' over' : ''}.</span></div>`).join('') + `</div>`;
-  // statement
+}
+function budgetTotals(m){
+  const rows = budgetRows(m);
+  const lim = sum(rows.map(r => r.lim)), spent = sum(rows.map(r => r.spent));
+  return {rows, lim, spent, frac: lim ? spent / lim : 0};
+}
+const stateOf = frac => frac >= 1 ? 'over' : frac >= 0.8 ? 'warn' : '';
+
+/* ---- dashboard ---- */
+function renderDashboard(v){
+  const m = ui.month, prevM = addMonths(m, -1), T = monthTotals(m), P = monthTotals(prevM);
+  const isCur = m === curYM(), pace = monthPace(m);
+  const out = round2(T.bills + T.other + T.saved);
+  const B = budgetTotals(m);
+  const rate = T.income ? T.saved / T.income * 100 : 0;
+
+  // headline status: a few words that say whether this month is OK
+  let status = {cls:'good', txt:'On track'};
+  if (T.net < 0) status = {cls:'bad', txt:'Spending more than you earn'};
+  else if (B.lim && isCur && B.frac > pace + 0.1) status = {cls:'warn', txt:'Spending ahead of pace'};
+  else if (B.lim && B.frac >= 1) status = {cls:'warn', txt:'Over budget'};
+  else if (!T.income && !out) status = {cls:'', txt:'Nothing recorded yet'};
+
+  // where the income went: one stacked bar
+  const base = Math.max(T.income, out) || 1;
+  const seg = (cls, val, name) => val > 0 ? `<div class="seg ${cls}" style="width:${(val / base * 100).toFixed(2)}%" title="${name}: ${money(val)}"></div>` : '';
+  const incomeMark = out > T.income && T.income > 0 ? `<i class="income-mark" style="left:${(T.income / base * 100).toFixed(2)}%" title="Income: ${money(T.income)}"></i>` : '';
+  const hero = `<section class="panel hero">
+    <div class="hero-head">
+      <div>
+        <div class="eyebrow">${T.net >= 0 ? 'Left this month' : 'Overspent this month'}</div>
+        <div class="hero-num ${T.net < 0 ? 'neg' : ''}" id="heroNum">${money(Math.abs(T.net))}</div>
+        <div class="ink2 hero-sub">${T.income ? `of ${money(T.income)} income, after bills, spending and savings` : 'No income recorded for this month yet'}</div>
+      </div>
+      <span class="pill ${status.cls}">${status.txt}</span>
+    </div>
+    <div class="alloc" role="img" aria-label="Income used: bills ${money(T.bills)}, other spending ${money(T.other)}, saved ${money(T.saved)}, left ${money(Math.max(0, T.net))}">${seg('a-bills', T.bills, 'Bills')}${seg('a-spend', T.other, 'Other spending')}${seg('a-save', T.saved, 'Saved')}${seg('a-left', T.net, 'Left')}${incomeMark}</div>
+    <div class="alloc-legend">
+      <span><i class="a-bills"></i>Bills <b>${money(T.bills)}</b></span>
+      <span><i class="a-spend"></i>Other spending <b>${money(T.other)}</b></span>
+      <span><i class="a-save"></i>Saved <b>${money(T.saved)}</b></span>
+      ${T.net > 0 ? `<span><i class="a-left"></i>Left</span>` : ''}
+    </div>
+  </section>`;
+
+  // this month's progress: bars instead of numbers
+  const billsDue = S.bills.filter(b => billDueIn(b, m));
+  const billsPaid = billsDue.filter(b => billPayment(b, m)).length;
+  const target = suggestedSavings(T.income);
+  const rows = [];
+  if (isCur) rows.push(progressRow('Month', pace, `Day ${todayDate().getDate()} of ${daysInMonth(m)}`, {state:'calm'}));
+  if (billsDue.length) rows.push(progressRow('Bills paid', billsPaid / billsDue.length, billsPaid === billsDue.length ? 'All paid' : `${billsPaid} of ${billsDue.length}`, {state: billsPaid === billsDue.length ? 'good' : '', title:`${billsDue.length - billsPaid} still to pay`}));
+  if (B.lim) rows.push(progressRow('Budget used', B.frac, `${Math.round(B.frac * 100)}%`, {state:stateOf(B.frac), mark: isCur ? pace : null, title:`${money(B.spent)} of ${money(B.lim)} across ${B.rows.length} budgets`}));
+  if (target > 0) rows.push(progressRow('Savings target', T.saved / target, T.saved >= target ? 'Reached' : `${Math.round(T.saved / target * 100)}%`, {state: T.saved >= target ? 'good' : '', title:`${money(T.saved)} saved of ${money(target)} (${S.settings.savingsMode === 'percent' ? S.settings.savingsPercent + '% of income' : 'fixed amount'})`}));
+  const progress = `<section class="panel"><div class="panel-h"><h2>${isCur ? 'This month so far' : monthLabel(m, true)}</h2></div>
+    <div class="prows">${rows.join('') || '<div class="empty">Add bills, budgets or income to see progress here.</div>'}</div>
+    ${B.lim && isCur ? '<p class="hint" style="margin:12px 0 0">The line on the budget bar marks how far through the month you are. Staying left of it means you’re on pace.</p>' : ''}
+    ${!B.lim ? '<p class="hint" style="margin:12px 0 0">Set budgets on the Budgets &amp; Goals tab to track your spending pace.</p>' : ''}
+  </section>`;
+
+  // budget warnings: short, and only when needed
+  const over = B.rows.filter(r => r.state !== 'ok');
+  const alerts = over.length ? `<div class="alerts">` + over.map(r => `<div class="alert ${r.state === 'over' ? 'bad' : ''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 3l10 18H2z"/><path d="M12 10v4M12 17.5v.5"/></svg><span><b>${esc(r.c)}</b> ${r.state === 'over' ? `is over budget by ${money(r.spent - r.lim)}` : 'is close to its budget'}.</span></div>`).join('') + `</div>` : '';
+
+  // spending by category: bars coloured by budget state
+  const cats = Object.entries(T.byCat).sort((a, b) => b[1] - a[1]);
+  const maxC = cats.length ? cats[0][1] : 0;
+  const bars = cats.length ? `<div class="bars">` + cats.map(([c, a]) => {
+    const lim = +S.budgets[c] || 0, st = lim ? stateOf(a / lim) : '';
+    const tip = `${c}: ${money(a)}, ${Math.round(a / T.spending * 100)}% of spending${lim ? `, budget ${money(lim)}` : ''}`;
+    return `<div class="bar-row" title="${esc(tip)}"><span class="lbl">${esc(c)}</span><div class="track"><div class="fill ${st}" style="width:${(a / maxC * 100).toFixed(1)}%"></div></div><span class="val">${money(a)}</span></div>`;
+  }).join('') + `</div>` : `<div class="empty">No spending recorded for ${monthLabel(m, true)}.</div>`;
+
+  // compared with last month: paired bars, then plain-language notes
+  const prate = P.income ? P.saved / P.income * 100 : 0;
+  const hasPrev = !!(P.income || P.spending || P.saved);
+  const diffs = Object.keys(Object.assign({}, T.byCat, P.byCat)).map(c => [c, round2((T.byCat[c] || 0) - (P.byCat[c] || 0))]);
+  const incs = diffs.filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 3);
+  const dec = diffs.filter(x => x[1] < 0).sort((a, b) => a[1] - b[1])[0];
+  const pair = (label, now, before, upGood, fmt, fmtDelta = fmt) => {
+    const max = Math.max(now, before) || 1, d = now - before, good = upGood ? d >= 0 : d <= 0;
+    const change = Math.abs(d) < 0.005 ? '<span class="muted">Same</span>' : `<span class="${good ? 'pos' : 'neg'}">${d > 0 ? '▲' : '▼'} ${fmtDelta(Math.abs(d))}</span>`;
+    return `<div class="pair"><div class="prow-top"><span class="prow-lbl">${label}</span>${change}</div>
+      <div class="pair-bars" title="${esc(`${label}: ${fmt(now)} now, ${fmt(before)} in ${monthLabel(prevM)}`)}"><div class="track thin"><div class="fill prev" style="width:${(before / max * 100).toFixed(1)}%"></div></div><div class="track thin"><div class="fill" style="width:${(now / max * 100).toFixed(1)}%"></div></div></div></div>`;
+  };
+  const ins = [];
+  if (!hasPrev) ins.push(`No transactions in ${monthLabel(prevM, true)} to compare with yet.`);
+  else {
+    incs.forEach(([c, d]) => ins.push(`You spent <b>${money(d)}</b> more on ${esc(c)} than last month.`));
+    if (dec) ins.push(`${esc(dec[0])} came down by <b>${money(-dec[1])}</b>.`);
+    if (T.income) ins.push(rate >= prate ? `Your savings rate rose to ${rate.toFixed(1)}% (from ${prate.toFixed(1)}%).` : `Your savings rate slipped to ${rate.toFixed(1)}% (from ${prate.toFixed(1)}%).`);
+  }
+  if (isCur) ins.push(`This month is still running, so it will keep changing until ${fmtShort(m + '-' + daysInMonth(m))}.`);
+  const cmp = `${hasPrev ? `<div class="pairs">
+      ${pair('Income', T.income, P.income, true, money)}
+      ${pair('Spending', T.spending, P.spending, false, money)}
+      ${pair('Savings rate', rate, prate, true, x => x.toFixed(1) + '%', x => x.toFixed(1) + ' pts')}
+    </div>
+    <div class="legend" style="margin:10px 0 14px"><span><i style="background:var(--line-strong)"></i>${monthLabel(prevM)}</span><span><i style="background:var(--accent)"></i>${monthLabel(m)}</span></div>` : ''}
+    <ul class="insights">${ins.map(s => `<li><span>${s}</span></li>`).join('')}</ul>`;
+
+  // full statement and trend: available, but folded away
   const rowsOf = (o, cls = 'sub') => Object.entries(o).sort((a, b) => b[1] - a[1]).map(([k, a]) => `<tr class="${cls}"><td>${esc(k)}</td><td>${money(a)}</td></tr>`).join('');
   const stmt = `<table class="stmt">
     <tr class="sec"><td colspan="2">Money in</td></tr>
@@ -955,52 +1089,24 @@ function renderDashboard(v){
     <tr class="grp"><td>Bills</td><td>${money(T.bills)}</td></tr>${rowsOf(T.billsByCat)}
     <tr class="grp"><td>Other spending</td><td>${money(T.other)}</td></tr>${rowsOf(T.otherByCat)}
     <tr class="grp"><td>Savings transfers</td><td>${money(T.saved)}</td></tr>${rowsOf(T.savByGoal)}
-    <tr class="tot"><td>Total out</td><td>${money(T.bills + T.other + T.saved)}</td></tr>
+    <tr class="tot"><td>Total out</td><td>${money(out)}</td></tr>
     <tr class="net"><td>Net cashflow</td><td class="${T.net < 0 ? 'neg' : 'pos'}">${money(T.net, {sign:true})}</td></tr>
   </table>`;
-  // category bars
-  const cats = Object.entries(T.byCat).sort((a, b) => b[1] - a[1]);
-  const maxC = cats.length ? cats[0][1] : 0;
-  const bars = cats.length ? `<div class="bars">` + cats.map(([c, a]) => `<div class="bar-row" title="${esc(c)}: ${money(a)}"><span class="lbl">${esc(c)}</span><div class="track"><div class="fill" style="width:${(a / maxC * 100).toFixed(1)}%"></div></div><span class="val">${money(a)} <span class="muted" style="font-weight:400">${(a / T.spending * 100).toFixed(0)}%</span></span></div>`).join('') + `</div>` : `<div class="empty">No spending recorded for ${monthLabel(m, true)}.</div>`;
-  // compare
-  const prevM = addMonths(m, -1);
-  const prate = P.income ? P.saved / P.income * 100 : 0;
-  const incs = Object.keys(Object.assign({}, T.byCat, P.byCat)).map(c => [c, round2((T.byCat[c] || 0) - (P.byCat[c] || 0))]).filter(x => x[1] > 0).sort((a, b) => b[1] - a[1]).slice(0, 3);
-  const dec = Object.keys(Object.assign({}, T.byCat, P.byCat)).map(c => [c, round2((T.byCat[c] || 0) - (P.byCat[c] || 0))]).filter(x => x[1] < 0).sort((a, b) => a[1] - b[1])[0];
-  const ins = [];
-  const hasPrev = P.income || P.spending || P.saved;
-  if (!hasPrev) ins.push(`No transactions in ${monthLabel(prevM, true)} to compare with yet.`);
-  else {
-    incs.forEach(([c, d]) => ins.push(`You spent <b>${money(d)}</b> more on ${esc(c)} than last month.`));
-    if (dec) ins.push(`${esc(dec[0])} came down by <b>${money(-dec[1])}</b>.`);
-    const dSp = round2(T.spending - P.spending);
-    ins.push(dSp > 0 ? `Total spending is up ${money(dSp)} on ${monthLabel(prevM)}.` : dSp < 0 ? `Total spending is down ${money(-dSp)} on ${monthLabel(prevM)}.` : `Total spending is level with ${monthLabel(prevM)}.`);
-    if (T.income) ins.push(rate >= prate ? `Your savings rate rose to ${rate.toFixed(1)}% (from ${prate.toFixed(1)}%).` : `Your savings rate slipped to ${rate.toFixed(1)}% (from ${prate.toFixed(1)}%).`);
-  }
-  if (m === curYM()) ins.push(`This month is still running, so totals will keep changing until ${fmtShort(m + '-' + daysInMonth(m))}.`);
-  const dl = (a, b, upGood) => { const d = round2(a - b); if (!hasPrev) return ''; const good = upGood ? d >= 0 : d <= 0; return `<span class="dl ${good ? 'pos' : 'neg'}">${d >= 0 ? '+' : '−'}${money(Math.abs(d)).replace(/^−/, '')}</span>`; };
-  const cmp = `<div class="cmp">
-    <div><div class="eyebrow">Income</div><div class="v">${money(T.income)}</div>${dl(T.income, P.income, true)}</div>
-    <div><div class="eyebrow">Spending</div><div class="v">${money(T.spending)}</div>${dl(T.spending, P.spending, false)}</div>
-    <div><div class="eyebrow">Savings rate</div><div class="v">${rate.toFixed(1)}%</div>${hasPrev ? `<span class="dl ${rate >= prate ? 'pos' : 'neg'}">${rate >= prate ? '+' : '−'}${Math.abs(rate - prate).toFixed(1)} pts</span>` : ''}</div>
-  </div>
-  ${incs.length ? `<div class="eyebrow" style="margin-bottom:6px">Biggest increases</div><div class="row" style="margin-bottom:14px">${incs.map(([c, d]) => `<span class="chip">${esc(c)} <span class="neg">+${money(d)}</span></span>`).join('')}</div>` : ''}
-  <ul class="insights">${ins.map(s => `<li><span>${s}</span></li>`).join('')}</ul>`;
-  // trend
   const ms = [5,4,3,2,1,0].map(k => addMonths(m, -k)); const TT = ms.map(monthTotals);
   const trendTable = `<div class="tablewrap"><table class="t"><thead><tr><th>Month</th><th class="r">Income</th><th class="r">Spending</th><th class="r">Saved</th></tr></thead><tbody>${ms.map((mm, i) => `<tr><td>${monthLabel(mm)}</td><td class="amt">${money(TT[i].income)}</td><td class="amt">${money(TT[i].spending)}</td><td class="amt">${money(TT[i].saved)}</td></tr>`).join('')}</tbody></table></div>`;
-  html += `<div class="grid-wide" style="margin-bottom:18px">
-    <section class="panel"><div class="panel-h"><h2>Cashflow statement</h2><span class="muted">${monthLabel(m, true)}</span></div>${stmt}</section>
-    <section class="panel"><div class="panel-h"><h2>Spending by category</h2><span class="muted">${money(T.spending)} total</span></div>${bars}</section>
-  </div>
-  <div class="grid-wide">
-    <section class="panel"><div class="panel-h"><h2>6-month trend</h2><div class="legend"><span><i style="background:var(--s1)"></i>Income</span><span><i style="background:var(--s2)"></i>Spending</span><span><i style="background:var(--s3)"></i>Saved</span></div></div>
-      <div class="chart-box" id="trendBox"><canvas id="trend" aria-label="Income, spending and savings over the last six months" role="img"></canvas></div>
-      <details class="raw" style="margin-top:10px" id="trendTblWrap"><summary>Show as table</summary>${trendTable}</details>
-    </section>
+
+  v.innerHTML = dueStripHTML() + `
+  <div class="grid-wide" style="margin-bottom:18px">${hero}${progress}</div>
+  ${alerts}
+  <div class="grid-wide" style="margin-bottom:18px">
+    <section class="panel"><div class="panel-h"><h2>Where the money went</h2></div>${bars}</section>
     <section class="panel"><div class="panel-h"><h2>Compared with ${monthLabel(prevM)}</h2></div>${cmp}</section>
-  </div>`;
-  v.innerHTML = html;
+  </div>
+  <section class="panel" style="margin-bottom:18px"><div class="panel-h"><h2>Last 6 months</h2><div class="legend"><span><i style="background:var(--s1)"></i>Income</span><span><i style="background:var(--s2)"></i>Spending</span><span><i style="background:var(--s3)"></i>Saved</span></div></div>
+    <div class="chart-box" id="trendBox"><canvas id="trend" aria-label="Income, spending and savings over the last six months" role="img"></canvas></div>
+    <details class="raw" style="margin-top:10px" id="trendTblWrap"><summary>Show as table</summary>${trendTable}</details>
+  </section>
+  <details class="panel fold" id="stmtWrap"><summary><h2>Full cashflow statement</h2><span class="muted">Every source and category for ${monthLabel(m, true)}</span></summary>${stmt}</details>`;
   drawTrend(ms, TT);
 }
 function cssVar(n){ return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
@@ -1033,7 +1139,11 @@ function renderBills(v){
   const remAmt = sum(list.filter(x => x.st.key !== 'paid').map(x => x.b.amount));
   const notDue = S.bills.filter(b => !billDueIn(b, m));
   let html = dueStripHTML();
-  html += `<section class="panel"><div class="panel-h"><h2>${monthLabel(m, true)}</h2><span class="ink2">${paid.length} of ${list.length} paid · <b class="tnum">${money(paidAmt)}</b> paid · <b class="tnum">${money(remAmt)}</b> still to pay</span><button class="btn primary" data-act="add-bill">+ Add bill</button></div>`;
+  html += `<section class="panel"><div class="panel-h"><h2>${monthLabel(m, true)}</h2><button class="btn primary" data-act="add-bill">+ Add bill</button></div>`;
+  if (list.length) {
+    const all = paid.length === list.length;
+    html += `<div class="summary-bar">${progressRow('Bills paid', paid.length / list.length, all ? 'All paid' : `${paid.length} of ${list.length}`, {state: all ? 'good' : '', title:`${money(paidAmt)} paid`})}${all ? '' : `<span class="hint">${money(remAmt)} still to pay this month</span>`}</div>`;
+  }
   if (!S.bills.length) html += `<div class="empty">No bills yet. Add each recurring bill once (rent, TNB, Unifi, car loan…) and it will appear here every month as unpaid until you mark it paid.</div>`;
   else if (!list.length) html += `<div class="empty">No bills fall due in ${monthLabel(m, true)}.</div>`;
   else html += `<div class="tablewrap"><table class="t"><thead><tr><th>Bill</th><th>Due</th><th class="r">Amount</th><th>Status</th><th class="r">Actions</th></tr></thead><tbody>` +
@@ -1103,24 +1213,30 @@ function renderBudgets(v){
     const saved = goalSaved(g), pct = g.target ? Math.min(100, saved / g.target * 100) : 0, rem = round2(g.target - saved), rate = goalRate(g);
     let eta = '';
     if (rem <= 0) eta = '<b class="pos">Goal reached</b>';
-    else if (rate > 0) { const n = Math.ceil(rem / rate); eta = `About <b>${n} month${n > 1 ? 's' : ''}</b> to go at ${money(rate)}/month (around ${monthLabel(addMonths(curYM(), n))}).`; }
-    else eta = 'No savings toward this goal in the last 3 months, so there’s no estimate yet.';
+    else if (rate > 0) { const n = Math.ceil(rem / rate); eta = `<span title="${esc(`At ${money(rate)} a month, your average over the last 3 months`)}">About <b>${n} month${n > 1 ? 's' : ''}</b> to go (around ${monthLabel(addMonths(curYM(), n))})</span>`; }
+    else eta = 'Add savings to see when you’ll get there.';
     return `<div class="goal"><div class="row"><h3 style="flex:1">${esc(g.name)}</h3><button class="btn sm ghost" data-act="edit-goal" data-id="${g.id}">Edit</button></div>
-      <div><span class="big">${money(saved)}</span> <span class="muted">of ${money(g.target)}</span></div>
-      <div class="track"><div class="fill good" style="width:${pct.toFixed(1)}%"></div></div>
-      <div class="hint" style="font-size:.84rem">${pct.toFixed(0)}% · ${eta}</div>
+      <div class="prow-top" style="margin:0"><span><span class="big">${money(saved)}</span> <span class="muted">of ${money(g.target)}</span></span><span class="prow-val ${pct >= 100 ? 'good' : ''}">${pct.toFixed(0)}%</span></div>
+      <div class="track" role="progressbar" aria-label="${esc(g.name)} progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(pct)}"><div class="fill good" style="width:${pct.toFixed(1)}%"></div></div>
+      <div class="hint" style="font-size:.84rem">${eta}</div>
       <div><button class="btn sm" data-act="contrib" data-id="${g.id}">+ Add savings</button></div></div>`;
   }).join('')}</div>` : `<div class="empty">No goals yet. Try an emergency fund of three to six months of expenses.</div>`;
-  const rows = S.categories.map(c => {
-    const spent = catSpend(m, c), lim = +S.budgets[c] || 0, pct = lim ? spent / lim * 100 : 0;
-    const st = !lim ? '' : pct >= 100 ? 'over' : pct >= 80 ? 'warn' : '';
-    return `<div class="budget"><div class="bt"><b>${esc(c)}</b><span class="tnum">${money(spent)}${lim ? ` <span class="muted">of ${money(lim)}</span>` : ''} ${st ? `<span class="state ${st}">${st === 'over' ? 'Over by ' + money(spent - lim) : pct.toFixed(0) + '% used'}</span>` : ''}</span></div>
-      <div class="track">${lim ? `<div class="fill ${st}" style="width:${Math.min(100, pct).toFixed(1)}%"></div>` : ''}</div>
-      <label class="lim"><span class="hint">Monthly limit</span><input class="in tnum" type="number" min="0" step="10" inputmode="decimal" id="bud-${esc(c).replace(/\W+/g, '_')}" data-budget="${esc(c)}" value="${lim || ''}" placeholder="No limit"></label></div>`;
+  const pace = monthPace(m), isCur = m === curYM();
+  const limitInput = (c, lim) => `<label class="lim"><span class="hint">Monthly limit</span><input class="in tnum" type="number" min="0" step="10" inputmode="decimal" id="bud-${esc(c).replace(/\W+/g, '_')}" data-budget="${esc(c)}" value="${lim || ''}" placeholder="No limit"></label>`;
+  const budgeted = S.categories.filter(c => +S.budgets[c] > 0), unbudgeted = S.categories.filter(c => !(+S.budgets[c] > 0));
+  const rows = budgeted.map(c => {
+    const spent = catSpend(m, c), lim = +S.budgets[c], frac = spent / lim, st = stateOf(frac);
+    const note = st === 'over' ? `<span class="state over">Over by ${money(spent - lim)}</span>` : `<span class="muted">${money(Math.max(0, lim - spent))} left</span>`;
+    return `<div class="budget" title="${esc(`${c}: ${money(spent)} of ${money(lim)}`)}"><div class="bt"><b>${esc(c)}</b>${note}</div>
+      <div class="track" role="progressbar" aria-label="${esc(c)} budget used" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${Math.round(clamp01(frac) * 100)}"><div class="fill ${st}" style="width:${(clamp01(frac) * 100).toFixed(1)}%"></div>${isCur ? `<i class="pace-mark" style="left:${(pace * 100).toFixed(1)}%" aria-hidden="true"></i>` : ''}</div>
+      ${limitInput(c, lim)}</div>`;
   }).join('');
+  const B = budgetTotals(m);
+  const summary = B.lim ? `<div class="summary-bar">${progressRow('All budgets', B.frac, B.frac >= 1 ? 'Over' : `${money(Math.max(0, B.lim - B.spent))} left`, {state:stateOf(B.frac), mark: isCur ? pace : null, title:`${money(B.spent)} of ${money(B.lim)}`})}${isCur ? '<span class="hint">The line marks how far through the month you are. Bars that pass it are spending faster than the month.</span>' : ''}</div>` : '';
+  const others = unbudgeted.length ? `<details class="raw" style="margin-top:14px" ${budgeted.length ? '' : 'open'}><summary>${budgeted.length ? `Set a limit for another category (${unbudgeted.length})` : 'Set your first monthly limits'}</summary>${unbudgeted.map(c => `<div class="budget"><div class="bt"><b>${esc(c)}</b><span class="muted">${catSpend(m, c) ? money(catSpend(m, c)) + ' spent' : ''}</span></div>${limitInput(c, 0)}</div>`).join('')}</details>` : '';
   const sm = S.settings;
   v.innerHTML = `<div class="grid-wide">
-    <section class="panel"><div class="panel-h"><h2>Budgets for ${monthLabel(m, true)}</h2><span class="hint">Amber at 80%, red at 100%</span></div>${rows}</section>
+    <section class="panel"><div class="panel-h"><h2>Budgets for ${monthLabel(m, true)}</h2></div>${summary}${rows}${others}</section>
     <div class="stack">
       <section class="panel"><div class="panel-h"><h2>Pay yourself first</h2></div>
         <p class="ink2" style="margin:0 0 12px;font-size:.9rem">When you save a payslip, Aliran offers to move this amount to savings straight away, before the month's spending starts.</p>
@@ -1128,7 +1244,8 @@ function renderBudgets(v){
           <label class="f">Rule<select class="in" id="svMode"><option value="percent" ${sm.savingsMode === 'percent' ? 'selected' : ''}>Percentage of net pay</option><option value="fixed" ${sm.savingsMode === 'fixed' ? 'selected' : ''}>Fixed amount</option></select></label>
           <label class="f">${sm.savingsMode === 'percent' ? 'Percent of net pay' : 'Amount (' + esc(sm.currency) + ')'}<input class="in tnum" type="number" min="0" step="${sm.savingsMode === 'percent' ? 1 : 10}" id="svVal" value="${sm.savingsMode === 'percent' ? sm.savingsPercent : sm.savingsFixed}"></label>
         </div>
-        ${lastNet ? `<p class="hint" style="margin:10px 0 0">On your last net pay of ${money(lastNet)}, that's <b>${money(suggestedSavings(lastNet))}</b> a month.</p>` : ''}
+        ${(() => { const T = monthTotals(m), tgt = suggestedSavings(T.income || lastNet); if (!(tgt > 0)) return ''; const done = T.saved >= tgt;
+          return `<div style="margin-top:14px">${progressRow(`Saved in ${monthLabel(m)}`, T.saved / tgt, done ? 'Target reached' : `${money(T.saved)} of ${money(tgt)}`, {state: done ? 'good' : ''})}</div>`; })()}
       </section>
       <section class="panel"><div class="panel-h"><h2>Savings goals</h2><button class="btn primary sm" data-act="add-goal">+ New goal</button></div>${goalsHTML}</section>
     </div></div>`;

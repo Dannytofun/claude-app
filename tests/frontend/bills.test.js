@@ -98,6 +98,18 @@ test('mark a variable bill as paid with the actual amount: creates one expense, 
   assert.equal(s.bills[0].amount, 143.6, 'next month estimate follows the last actual');
   assert.equal(status(app, 'b1', '2026-10'), 'paid');
   assert.equal(app.ev(`monthTotals('2026-10').bills`), 143.6);
+  assert.match(app.$('.summary-bar').textContent, /Bills paid\s*All paid/);
+});
+
+test('bills tab shows a progress bar of bills paid, with the amount still to pay', () => {
+  const app = emptyApp();
+  app.seed('bills', [bill({ id: 'a', dueDay: 1, startMonth: '2026-10' }), bill({ id: 'b', dueDay: 25, amount: 68, startMonth: '2026-10' })]);
+  app.seed('billPayments', [{ billId: 'a', month: '2026-10', paidDate: '2026-10-01', actualAmount: 129, transactionId: null }]);
+  app.go('bills');
+  const bar = app.$('.summary-bar');
+  assert.match(bar.querySelector('.prow-val').textContent, /1 of 2/);
+  assert.equal(parseFloat(bar.querySelector('.fill').style.width), 50);
+  assert.match(bar.textContent, /RM 68\.00 still to pay/);
 });
 
 test('link an uploaded receipt instead of creating a duplicate expense', () => {

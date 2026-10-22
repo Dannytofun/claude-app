@@ -1,6 +1,6 @@
 # Aliran Cashflow: test report
 
-**Result:** 109 tests, 109 passing (75 frontend, 34 backend, security and end-to-end). Testing found 5 bugs across three rounds; all are fixed, and the ones a test can catch have regression tests.
+**Result:** 112 tests, 112 passing (78 frontend, 34 backend, security and end-to-end). Testing found 5 bugs across three rounds; all are fixed, and the ones a test can catch have regression tests.
 
 Run the tests with `npm test`. Frontend tests (`tests/frontend/`) load the real `src/app.html` in a simulated browser (jsdom) with "today" fixed at 22 Oct 2026. Backend tests (`tests/server/`) run the real server in-process with an in-memory database.
 

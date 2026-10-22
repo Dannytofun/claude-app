@@ -2,6 +2,15 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com). Versions follow [Semantic Versioning](https://semver.org).
 
+## [1.1.0] - 2026-10-22
+
+### Changed
+- Dashboard leads with one figure (money left this month), a status label and a single bar showing where income went, in place of five number cards.
+- New "This month so far" panel: progress bars for the month, bills paid, budget used (with a pace line) and savings target.
+- Budgets show a pace line on every bar and an overall bar; categories without a limit are folded away.
+- Bills, goals and pay-yourself-first show progress bars; exact figures moved to hover details.
+- Month comparison uses paired bars; the full cashflow statement is folded by default.
+
 ## [1.0.0] - 2026-10-22
 
 ### Added
