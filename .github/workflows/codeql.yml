@@ -13,6 +13,10 @@ permissions:
 
 jobs:
   analyze:
+    # Code scanning is free only on public repositories (private ones need GitHub Advanced Security),
+    # so skip instead of failing. Runs automatically if the repository is made public.
+    # Scheduled runs carry no repository details, so they are skipped too; push and pull request scans still run.
+    if: github.event.repository.private == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
